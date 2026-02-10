@@ -1,0 +1,7 @@
+:root {
+
+    --el-header-height: 60px;
+    --el-aside-width: 415px;
+    --el-main-height: calc(100vh - 60px);
+}
+

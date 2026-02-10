@@ -1,0 +1,15 @@
+.el-header,
+.el-footer,
+.el-main,
+.el-aside,
+.el-container {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+.el-input {
+    background: var(--bg-deep);
+
+}

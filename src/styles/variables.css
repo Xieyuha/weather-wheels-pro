@@ -1,0 +1,55 @@
+:root {
+  /* --- 2个核心主题色 (Theme Colors) --- */
+  /* 1. 活力橙 (品牌主色): 用于Logo背景、选中状态、关键按钮 */
+  --color-primary: #FF5A30;
+  /* 2. 科技蓝 (辅助色/强调色): 用于地图轨迹、链接、信息提示 */
+  --color-secondary: #409EFF;
+
+  /* --- 4个层级背景色 (Background Colors) --- */
+  /* Level 1: 最深沉 - 用于最左侧窄导航栏 (Main Nav) */
+  --bg-deep: #292a2e; 
+  
+  /* Level 2: 次深 - 用于侧边功能面板底色 (Side Panel) */
+  --bg-panel: #2f2f37; 
+  
+  /* Level 3: 稍亮 - 用于卡片、列表项背景 (Cards/Items) */
+  --bg-card: #292B32; 
+  
+  /* Level 4: 最亮/交互 - 用于输入框、悬浮态、分割线 (Inputs/Hover) */
+  --bg-hover: #32343C;
+
+  --bg-border: #41484e;
+
+  /* --- 文字颜色 (Text Colors) --- */
+  --text-main: #FFFFFF;        /* 主要文字 */
+  --text-secondary: #A0A0A0;   /* 次要文字/说明文字 */
+  --text-placeholder: #505050; /* 占位符颜色 */
+  
+  /* --- 3. 渐变色 (Gradients) --- */
+  /* 主色渐变 (用于按钮、激活条、图标背景) */
+  --gradient-primary: linear-gradient(135deg, #FF8C60 0%, #FF5A30 100%);
+  
+  /* 路径渐变 (用于地图轨迹: 蓝 -> 橙) */
+  --gradient-route: linear-gradient(90deg, #409EFF 0%, #FF5A30 100%);
+
+  /* 背景渐变 (用于侧边栏、卡片，增加质感) */
+  --gradient-bg-deep: linear-gradient(180deg, #2A2B30 0%, #18191D 100%);
+  --gradient-bg-panel: linear-gradient(180deg,#2d3035 0%, #30333a 50%);
+  --gradient-bg-card: linear-gradient(180deg, #475059 20%, #474d5b 80%);
+  
+  /* 径向渐变 (从中心扩散: 模拟聚光灯/暗角效果) */
+  /* --gradient-vignette: radial-gradient(circle at center, center-color 0%, edge-color 100%) */
+  --gradient-radial-glow: radial-gradient(circle at 50% 0%, #32343C 0%, #18191D 100%);  /* 顶部发光 */
+  --gradient-radial-soft: radial-gradient(circle, #2C2E34 0%, #18191D 100%);            /* 中心微亮 */
+
+  --panel-border-radius: 8px;
+
+
+
+
+  /* --- Element Plus 变量覆盖 (Mapping to Element) --- */
+  --el-color-primary: var(--color-primary);
+  --el-bg-color: var(--bg-panel);
+  --el-text-color-primary: var(--text-main);
+  --el-text-color-regular: var(--text-secondary);
+}
