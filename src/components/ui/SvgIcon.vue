@@ -19,8 +19,8 @@ const symbolId = computed(() => `#icon-${props.name}`);
 
 <style scoped>
 .svg-icon {
-    width: 1em;
-    height: 1em;
+    width: 100%;
+    height: 100%;
     fill: currentColor;
     vertical-align: middle;
 }

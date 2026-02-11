@@ -6,12 +6,8 @@
                 <FeaturePanel />
             </el-aside>
             <el-container>
-                <el-header>
-                    <Header />
-                </el-header>
-                <el-main>
-                    <!-- <MapContainer /> -->
-                </el-main>
+                <Header />
+                <MapContainer />
             </el-container>
         </el-container>
     </div>
