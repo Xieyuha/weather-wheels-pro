@@ -1,38 +1,41 @@
-import type { MapType, IMapAdapter } from './types';
+import type { MapType, IMapAdapter, IMapConfig } from './types';
 import AmapAdapter from './AmapAdapter';
+import CesiumAdapter from './CesiumAdapter';
+// 地图适配器类
+class MapAdapter implements IMapAdapter {
+    private adapter: IMapAdapter | null = null;
+    private config: IMapConfig;
 
-class MapAdapter {
-    private mapType: MapType;
-    private options: IMapAdapter;
-    private map: AmapAdapter | null = null;
-
-    constructor(options: IMapAdapter) {
-        this.options = options;
-        this.mapType = options.mapType;
+    constructor(config: IMapConfig) {
+        this.config = config;
     }
 
-    static create(options: IMapAdapter): MapAdapter {
-        return new MapAdapter(options);
+    static create(config: IMapConfig): MapAdapter {
+        return new MapAdapter(config);
     }
 
     async init(): Promise<void> {
-        switch (this.mapType) {
+        switch (this.config.mapType) {
             case 'cesium':
+                this.adapter = new CesiumAdapter(this.config);
+                await this.adapter.init();
                 break;
             case 'amap':
-                this.map = new AmapAdapter(this.options);
-                await this.map.init();
+                this.adapter = new AmapAdapter(this.config);
+                await this.adapter.init();
                 break;
             default:
                 throw new Error('Unsupported map type');
         }
     }
+
     getMap() {
-        return this.map;
+        return this.adapter?.getMap();
     }
+    
     destroy() {
-        this.map = null;
-        console.log(`${this.mapType} manager destroyed`)
+        this.adapter?.destroy();
+        this.adapter = null;
     }
 }
 

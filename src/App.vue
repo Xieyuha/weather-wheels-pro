@@ -1,9 +1,10 @@
 <template>
-    <MapContainer />
+    <HomeView />
 </template>
 
-<script setup >
-import MapContainer from './views/MapContainer.vue';
+<script setup lang="ts">
+import HomeView from './views/HomeView.vue';
+
 </script>
 
 <style >
