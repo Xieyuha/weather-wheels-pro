@@ -13,6 +13,7 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "cesium": "^1.138.0",
+    "vite-plugin-static-copy": "^3.0.2",
     "element-plus": "^2.13.2",
     "fast-glob": "^3.3.3",
     "pinia": "^3.0.4",

@@ -1,12 +1,11 @@
 <template>
     <div class="home-view">
         <el-container>
-            <el-aside>
+            <el-aside class="sider-container">
                 <SiderNavBar />
                 <FeaturePanel />
             </el-aside>
-            <el-container>
-                <Header />
+            <el-container class="map-container">
                 <MapContainer />
             </el-container>
         </el-container>
@@ -21,8 +20,14 @@
 </script>
 
 <style scoped>
-    .el-aside {
+    .sider-container {
         height: 100vh;
         display: flex;
     }
+    .map-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
 </style>
