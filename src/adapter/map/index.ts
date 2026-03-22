@@ -1,7 +1,8 @@
-import type { MapType, IMapAdapter, IMapConfig } from './types';
+import type { IMapAdapter, IMapConfig } from './types';
+import { MapType } from './types';
 import AmapAdapter from './AmapAdapter';
 import CesiumAdapter from './CesiumAdapter';
-// 地图适配器类
+
 class MapAdapter implements IMapAdapter {
     private adapter: IMapAdapter | null = null;
     private config: IMapConfig;
@@ -13,7 +14,7 @@ class MapAdapter implements IMapAdapter {
     static create(config: IMapConfig): MapAdapter {
         return new MapAdapter(config);
     }
-
+    // 可以优化为注册表结构
     async init(): Promise<void> {
         switch (this.config.mapType) {
             case 'cesium':
