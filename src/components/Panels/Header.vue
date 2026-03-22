@@ -7,8 +7,12 @@
             placeholder="Map Type"
             size="small"
         >
-            <el-option label="Cesium" :value="MapType.Cesium" />
-            <el-option label="Amap" :value="MapType.Amap" />
+            <el-option 
+            v-for="(value, index) in MapType"
+            :key="index"
+            :label="value"
+            :value="value"
+            />
         </el-select>
         <el-button>Profile</el-button>
         <el-button>Settings</el-button>
@@ -19,6 +23,7 @@
     import { useMapStore } from '@/stores/useMapStore';
     import { storeToRefs } from 'pinia';
     import { MapType } from '@/adapter/map/types';
+import { Model } from 'cesium';
 
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
