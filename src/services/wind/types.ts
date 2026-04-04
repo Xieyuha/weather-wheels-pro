@@ -17,7 +17,7 @@ const GFSJSON = [
     }
 ]
 
-interface WindField {
+export interface WindField {
     meta: {
         // 起始经度(左边界)、起始维度(上边界)、结束经度、结束维度
         // 左上开始逐行扫描
@@ -35,4 +35,19 @@ interface WindField {
     w?: number[];      // 垂直风分量 m/s  
 }
 
-export type { WindField }
+export type WindBounds = WindField['meta']['bounds']
+// 粒子
+export interface Particle {
+    lon: number;
+    lat: number;
+    age: number;
+    maxAge: number;
+}
+
+// 绘制指令（WindParticleSystem 输出，渲染层消费）
+export interface DrawCommand {
+    prevLon: number; prevLat: number;
+    lon: number;     lat: number;
+    speed: number;   // 用于着色
+    alpha: number;   // 生命周期透明度
+}

@@ -1,11 +1,11 @@
 import type { WindField } from './types';
 /**
- * @description: 双线性插值得到指定经纬度的风速
- * @params windField: WindField
- * @params lon: number
- * @params lat: number
- * @returns u: number; v: number  | null
-**/
+ * 双线性插值得到指定经纬度的风速
+ * @param windField 风场数据
+ * @param lon 纬度
+ * @param lat 经度
+ * @returns u,v 风速矢量分量
+ */
 export function sampleWind(
     windField: WindField,
     lon: number,
@@ -15,6 +15,7 @@ export function sampleWind(
     const { bounds, nx, ny, dx, dy } = meta;
 
     // 越界返回 null，粒子在边界处死亡
+    // la1北边界，更大
     if (lon < bounds.lo1 || lon > bounds.lo2 ||
         lat < bounds.la2 || lat > bounds.la1) {
         return null;
