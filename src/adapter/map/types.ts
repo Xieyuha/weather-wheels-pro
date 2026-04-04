@@ -10,15 +10,24 @@ export interface IMapConfig {
     mapType: MapType;
     //init(): Promise<void>;
 }
+// ── 投影器接口（每帧由适配器创建一次，粒子层逐点调用）──
+export interface IProjector {
+    project(lon: number, lat: number): { x: number; y: number } | null;
+}
+
 // 地图适配器接口
 export interface IMapAdapter {
     init(): Promise<void>;
-    // 添加各种方法的组装与暴露，manage管理子文件夹
-    // 要素、图层、
-    // 事件总线：缩放->请求(优化)
-    // 视角
     destroy(): void;
-    getMap(): void;
+    getMap(): unknown;
+
+    // ── 粒子系统需要的三个方法 ──
+    // 每帧调一次，返回一个投影器（内部缓存了当前相机状态）
+    createProjector(): IProjector;
+    // canvas 挂载到哪个 DOM 节点
+    getOverlayContainer(): HTMLElement;
+    // 当前视口尺寸
+    getViewportSize(): { w: number; h: number };
 }
 declare global {
     interface Window {

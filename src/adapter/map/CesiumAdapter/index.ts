@@ -1,8 +1,13 @@
+// TODO: 实现 createProjector() — 提取 MVP 矩阵，返回 IProjector
+// TODO: 实现 getOverlayContainer() — 返回 viewer.container
+// TODO: 实现 getViewportSize() — 返回 viewer.canvas 尺寸
+// TODO: addWindLayer() 改为使用 WindLayer + CanvasWindRenderer（不再直接 new WindParticleLayer）
+// TODO: requestRenderMode 下需在帧循环中调 scene.requestRender()
+
 import * as Cesium from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
-import type { IMapAdapter, MapType, IMapConfig } from '../types';
+import type { IMapAdapter, IMapConfig, IProjector } from '../types';
 
-// cesium地图适配器类
 class CesiumAdapter implements IMapAdapter {
     private map: Cesium.Viewer | null = null;
     private container: string;
@@ -19,17 +24,14 @@ class CesiumAdapter implements IMapAdapter {
                 terrain: Cesium.Terrain.fromWorldTerrain(),
                 timeline: false,
                 animation: false,
-                baseLayerPicker: false, // 禁用底图选择器减少UI开销
+                baseLayerPicker: false,
                 fullscreenButton: false,
                 homeButton: false,
-                sceneModePicker: false, // 禁用场景模式选择器
-                selectionIndicator: false, // 禁用选择指示器
+                sceneModePicker: false,
+                selectionIndicator: false,
                 navigationHelpButton: false,
-                // 性能优化：按需渲染
                 requestRenderMode: true,
-                maximumRenderTimeChange: Infinity,
             });
-            //(viewer.cesiumWidget.creditContainer as HTMLElement).style.display = 'none';
             viewer.camera.setView({
                 destination: Cesium.Cartesian3.fromDegrees(116.397428, 39.90923, 50000),
             })
@@ -39,12 +41,30 @@ class CesiumAdapter implements IMapAdapter {
         }
     }
 
+    // TODO: 提取 MVP 矩阵，构造快速投影器
+    // 每帧调一次（取矩阵），project() 每粒子调一次（纯数学）
+    createProjector(): IProjector {
+        throw new Error('Not implemented');
+    }
+
+    getOverlayContainer(): HTMLElement {
+        return this.map!.container as HTMLElement;
+    }
+
+    getViewportSize(): { w: number; h: number } {
+        return {
+            w: this.map!.canvas.width,
+            h: this.map!.canvas.height,
+        };
+    }
+
     destroy(): void {
         if (this.map) {
             this.map.destroy();
             this.map = null;
         }
     }
+
     getMap(): Cesium.Viewer | null {
         return this.map;
     }
