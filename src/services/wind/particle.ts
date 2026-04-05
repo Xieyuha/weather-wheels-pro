@@ -1,7 +1,8 @@
 import type { WindField, WindBounds, Particle } from './types';
 import { sampleWind } from './interpolate';
 
-const METERS_PER_DEGREE = 111000;
+// const METERS_PER_DEGREE = 111000; // 完善投影后使用
+const METERS_PER_DEGREE = 111;
 
 /**
  * 随机撒点

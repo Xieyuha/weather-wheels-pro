@@ -35,7 +35,7 @@ export class WindParticleSystem {
                     lon: p.lon,
                     lat: p.lat,
                     speed: Math.sqrt(wind.u ** 2 + wind.v ** 2),
-                    alpha: Math.min(p.age / 15, 1) * 0.85,
+                    alpha: Math.min(p.age / 15, 1) * 0.35,
                 })
             })
             return commands
