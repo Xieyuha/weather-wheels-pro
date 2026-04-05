@@ -17,6 +17,7 @@ class CesiumAdapter implements IMapAdapter {
     }
 
     async init(): Promise<void> {
+        Cesium.Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_TOKEN;
         try {
             const viewer = new Cesium.Viewer(this.container, {
                 geocoder: false,
