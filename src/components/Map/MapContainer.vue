@@ -11,6 +11,7 @@
     import MapAdapter from '@/adapter/map';
     import Header from '../Panels/Header.vue';
     import { useMapStore } from '@/stores/useMapStore';
+    import { createWindLayer } from '@/services/wind/index'
     const map = shallowRef<MapAdapter | null>(null);
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
@@ -22,6 +23,7 @@
             mapType: mapType.value,
         });
         mapStore.setMap(map.value);
+        createWindLayer()
 
     });
     onUnmounted(() => {
