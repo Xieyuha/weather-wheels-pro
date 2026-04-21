@@ -44,8 +44,18 @@ class CesiumAdapter implements IMapAdapter {
 
     // TODO: 提取 MVP 矩阵，构造快速投影器
     // 每帧调一次（取矩阵），project() 每粒子调一次（纯数学）
-    createProjector(): IProjector {
-        throw new Error('Not implemented');
+    getProjector(): IProjector {
+        return {
+            project: (lon: number, lat: number) => {
+                if (!this.map) return null;
+                const cartesian = Cesium.Cartesian3.fromDegrees(lon, lat);
+                const screen = Cesium.SceneTransforms.worldToWindowCoordinates(
+                    this.map.scene, cartesian
+                );
+                if (!screen) return null;
+                return { x: screen.x, y: screen.y };
+            }
+        };
     }
 
     getOverlayContainer(): HTMLElement {
@@ -54,8 +64,8 @@ class CesiumAdapter implements IMapAdapter {
 
     getViewportSize(): { w: number; h: number } {
         return {
-            w: this.map!.canvas.width,
-            h: this.map!.canvas.height,
+            w: this.map!.container.clientWidth,
+            h: this.map!.container.clientHeight,
         };
     }
 

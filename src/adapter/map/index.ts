@@ -1,4 +1,4 @@
-import type { IMapAdapter, IMapConfig } from './types';
+import type { IMapAdapter, IMapConfig, IProjector} from './types';
 import { MapType } from './types';
 import AmapAdapter from './AmapAdapter';
 import CesiumAdapter from './CesiumAdapter';
@@ -29,11 +29,22 @@ class MapAdapter implements IMapAdapter {
                 throw new Error('Unsupported map type');
         }
     }
+    getProjector(): IProjector {
+        return this.adapter!.getProjector!();
+    }
+
+    getOverlayContainer(): HTMLElement {
+        return this.adapter!.getOverlayContainer!();
+    }
+
+    getViewportSize(): { w: number; h: number } {
+        return this.adapter!.getViewportSize!();
+    }
 
     getMap() {
         return this.adapter?.getMap();
     }
-    
+
     destroy() {
         this.adapter?.destroy();
         this.adapter = null;
