@@ -1,10 +1,10 @@
-import type MapAdapter from '@/adapter/map';
+import type { IMapAdapter } from '@/adapter/map/types';
 import { WindLayer } from './WindLayer';
 import WindService from './WindService';
 import { CanvasWindRenderer } from './renderers/CanvasWindRenderer';
 // 用类更合适??
 // TODO:暴露resize方法
-export async function createWindLayer(mapAdapter: MapAdapter) {
+export async function createWindLayer(mapAdapter: IMapAdapter) {
   const windField = await new WindService().getWindData();
   const container = mapAdapter.getOverlayContainer!();
   const { w: width, h: height } = mapAdapter.getViewportSize!();

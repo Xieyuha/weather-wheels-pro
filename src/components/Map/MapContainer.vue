@@ -8,22 +8,23 @@
 <script setup lang="ts">
     import { onMounted, onUnmounted, shallowRef, watch } from 'vue';
     import { storeToRefs } from 'pinia';
-    import MapAdapter from '@/adapter/map';
+    import { createMapAdapter } from '@/adapter/map/index';
+    import type { IMapAdapter } from '@/adapter/map/types';
     import Header from '../Panels/Header.vue';
     import { useMapStore } from '@/stores/useMapStore';
     import { createWindLayer } from '@/services/wind/index'
-    const map = shallowRef<MapAdapter | null>(null);
+    const map = shallowRef<IMapAdapter | null>(null);
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
     onMounted(async () => {
         if (map.value) return;
-        map.value = new MapAdapter({
+        map.value = createMapAdapter({
             container: 'mapContainer',
             // 组件通信传递mapType
             mapType: mapType.value,
         });
         await mapStore.setMap(map.value);
-        
+
         createWindLayer(map.value);
 
     });
@@ -34,7 +35,7 @@
 
     watch(mapType, (newMapType) => {
         mapStore.destroyMap()
-        map.value = new MapAdapter({
+        map.value = createMapAdapter({
             container: 'mapContainer',
             mapType: newMapType,
         });
