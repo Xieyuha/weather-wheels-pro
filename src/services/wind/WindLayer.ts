@@ -1,6 +1,7 @@
 import type { IProjector } from "@/adapter/map/types";
 import type { IWindRenderer } from "./renderers/types";
-import type { WindBounds, WindField } from "./types";
+import { speedToRGB } from "./color";
+import type { WindField } from "./types";
 import { WindParticleSystem } from "./WindParticleSystem";
 
 export class WindLayer {
@@ -34,10 +35,12 @@ export class WindLayer {
         for (const cmd of commands) {
             const from = this.projector.project(cmd.prevLon, cmd.prevLat)
             const to = this.projector.project(cmd.lon, cmd.lat)
+            const speed = cmd.speed
+            const [r, g, b] = speedToRGB(speed)
             this.renderer.addSegment(
-                from.x, from.y,
-                to.x, to.y,
-                255, 255, 255, cmd.alpha)
+                from!.x, from!.y,
+                to!.x, to!.y,
+                r, g, b, cmd.alpha)
         }
         this.renderer.endFrame()
         requestAnimationFrame(this.frame)

@@ -23,11 +23,11 @@ export interface IMapAdapter {
 
     // ── 粒子系统需要的三个方法 ──
     // 每帧调一次，返回一个投影器（内部缓存了当前相机状态）
-    getProjector?(): IProjector;
+    getProjector(): IProjector;
     // canvas 挂载到哪个 DOM 节点
-    getOverlayContainer?(): HTMLElement;
+    getOverlayContainer(): HTMLElement;
     // 当前视口尺寸
-    getViewportSize?(): { w: number; h: number };
+    getViewportSize(): { w: number; h: number };
 }
 declare global {
     interface Window {

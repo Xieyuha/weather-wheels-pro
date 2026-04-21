@@ -43,7 +43,7 @@ export class CanvasWindRenderer implements IWindRenderer {
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         ctx.globalCompositeOperation = 'source-over';
     }
-    // linewidth放哪里??
+    // TODO:添加linewidth参数，从lod结构的level获得，传入
     addSegment(fromX: number, fromY: number, toX: number, toY: number,
         r: number, g: number, b: number, a: number) {
         const ctx = this.ctx;
