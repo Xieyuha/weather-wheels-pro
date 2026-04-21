@@ -33,14 +33,14 @@
         mapStore.destroyMap()
     });
 
-    watch(mapType, (newMapType) => {
+    watch(mapType, async(newMapType) => {
         mapStore.destroyMap()
         map.value = createMapAdapter({
             container: 'mapContainer',
             mapType: newMapType,
         });
-        mapStore.setMap(map.value);
-
+        await mapStore.setMap(map.value);
+        createWindLayer(map.value);
     });
 </script>
 
