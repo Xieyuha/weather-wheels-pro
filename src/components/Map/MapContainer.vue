@@ -15,15 +15,16 @@
     const map = shallowRef<MapAdapter | null>(null);
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
-    onMounted(() => {
+    onMounted(async () => {
         if (map.value) return;
         map.value = new MapAdapter({
             container: 'mapContainer',
             // 组件通信传递mapType
             mapType: mapType.value,
         });
-        mapStore.setMap(map.value);
-        createWindLayer()
+        await mapStore.setMap(map.value);
+        
+        createWindLayer(map.value);
 
     });
     onUnmounted(() => {
