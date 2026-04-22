@@ -43,6 +43,6 @@ export class WindLayer {
                 r, g, b, cmd.alpha)
         }
         this.renderer.endFrame()
-        requestAnimationFrame(this.frame)
+        this.rafId = requestAnimationFrame(this.frame)
     }
 }
