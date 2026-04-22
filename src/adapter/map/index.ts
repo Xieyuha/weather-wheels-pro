@@ -7,8 +7,6 @@ export function createMapAdapter(config: IMapConfig): IMapAdapter {
     switch (config.mapType) {
         case 'cesium':
             return new CesiumAdapter(config);
-        case 'amap':
-            return new AmapAdapter(config);
         case 'openlayers':
             return new OlAdapter(config);
         default:
