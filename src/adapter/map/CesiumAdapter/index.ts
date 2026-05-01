@@ -39,6 +39,7 @@ class CesiumAdapter implements IMapAdapter {
             this.map = viewer;
         } catch (error) {
             console.error('Failed to initialize Cesium', error);
+            throw error
         }
     }
 

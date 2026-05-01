@@ -35,6 +35,7 @@ class OlAdapter implements IMapAdapter {
 
         } catch (error) {
             console.error('Failed to initialize OpenLayers', error);
+            throw error
         }
     }
 

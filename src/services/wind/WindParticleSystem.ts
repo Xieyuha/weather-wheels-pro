@@ -23,7 +23,7 @@ export class WindParticleSystem {
                 const prevLon = p.lon, prevLat = p.lat
                 const alive = stepParticle(p, this.windField, this.speedFactor)
                 if (!alive) {
-                    // 重置
+                    // 重置,这帧不绘制，可能造成粒子过度集中在边界，与闪烁，后续可以考虑淡出重置
                     Object.assign(p, createParticle(this.windField.meta.bounds))
                     return
                 }
@@ -41,7 +41,8 @@ export class WindParticleSystem {
             return commands
         }
         catch (e) {
-            throw new Error('Not implemented');
+            console.error('Error in WindParticleSystem.step:', e);
+            return [];
         }
 
     }

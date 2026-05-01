@@ -22,11 +22,18 @@ export const useMapStore = defineStore('map', {
             this.mapInstance = markRaw(adapter);
             this.isMapLoading = true;
             this.isMapReady = false;
-            await adapter.init();
-            this.isMapLoading = false;
-            this.isMapReady = true;
-            console.log(this.isMapReady)
-            console.log(`===map ready===${Date.now()}`)
+            await adapter.init().then(
+                () => {
+                    this.isMapLoading = false;
+                    this.isMapReady = true;
+                }
+            )
+                .catch((error) => {
+                    console.error('Failed to initialize map adapter', error);
+                    this.mapInstance = null;
+                    this.isMapLoading = false;
+                    this.isMapReady = false;
+                });
         },
         destroyMap() {
             this.mapInstance?.destroy();

@@ -14,19 +14,20 @@ export class CanvasWindRenderer implements IWindRenderer {
     }
 
     init(container: HTMLElement, width: number, height: number) {
-        try {
-            this.canvas = document.createElement('canvas')
-            Object.assign(this.canvas.style, {
-                position: 'absolute', top: '0', left: '0',
-                pointerEvents: 'none',
-            })
-            this.canvas.width = width;
-            this.canvas.height = height;
-            container.appendChild(this.canvas);
-            this.ctx = this.canvas.getContext('2d')!;
+        this.canvas = document.createElement('canvas')
+        if (!this.canvas) {
+            throw new Error('Failed to create canvas element');
         }
-        catch (E) {
-            throw new Error('canvas初始化失败');
+        Object.assign(this.canvas.style, {
+            position: 'absolute', top: '0', left: '0',
+            pointerEvents: 'none',
+        })
+        this.canvas.width = width;
+        this.canvas.height = height;
+        container.appendChild(this.canvas);
+        this.ctx = this.canvas.getContext('2d')!;
+        if (!this.ctx) {
+            throw new Error('Failed to get 2D context');
         }
 
     }
@@ -49,7 +50,7 @@ export class CanvasWindRenderer implements IWindRenderer {
         const ctx = this.ctx;
         ctx.beginPath();
         ctx.strokeStyle = `rgba(${r},${g},${b},${a})`;
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = this.lineWidth;
         ctx.moveTo(fromX, fromY);
         ctx.lineTo(toX, toY);
         ctx.stroke();
