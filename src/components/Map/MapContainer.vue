@@ -13,9 +13,12 @@
     import Header from '../Panels/Header.vue';
     import { useMapStore } from '@/stores/useMapStore';
     import { createWindLayer } from '@/services/wind/index'
+import type { WindLayer } from '@/services/wind/WindLayer';
     const map = shallowRef<IMapAdapter | null>(null);
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
+
+    const windLayer = shallowRef<WindLayer | null>(null);
     onMounted(async () => {
         if (map.value) return;
         map.value = createMapAdapter({
@@ -25,22 +28,26 @@
         });
         await mapStore.setMap(map.value);
 
-        createWindLayer(map.value);
+        windLayer.value = await createWindLayer(map.value);
 
     });
     onUnmounted(() => {
-        map.value = null;
+        windLayer.value?.stop()
+        windLayer.value = null
         mapStore.destroyMap()
+        map.value = null;
     });
 
     watch(mapType, async(newMapType) => {
+        windLayer.value?.stop()
+        windLayer.value = null
         mapStore.destroyMap()
         map.value = createMapAdapter({
             container: 'mapContainer',
             mapType: newMapType,
         });
         await mapStore.setMap(map.value);
-        createWindLayer(map.value);
+        windLayer.value = await createWindLayer(map.value);
     });
 </script>
 

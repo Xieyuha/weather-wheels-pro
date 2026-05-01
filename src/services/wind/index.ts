@@ -20,4 +20,5 @@ export async function createWindLayer(mapAdapter: IMapAdapter) {
     projector
   )
   windlayer.start()
+  return windlayer
 }
