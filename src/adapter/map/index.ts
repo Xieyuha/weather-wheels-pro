@@ -1,5 +1,4 @@
 import type { IMapAdapter, IMapConfig} from './types';
-import AmapAdapter from './AmapAdapter';
 import CesiumAdapter from './CesiumAdapter';
 import OlAdapter from './OlAdapter';
 
