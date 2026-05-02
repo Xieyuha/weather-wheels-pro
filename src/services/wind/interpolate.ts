@@ -14,6 +14,14 @@ export function sampleWind(
     const { meta, u, v } = windField;
     const { bounds, nx, ny, dx, dy } = meta;
 
+    // 将粒子经度归一化到数据的经度系统，避免跨系统越界误判
+    // 场景：视口 bounds 是 -180~180，数据是 0-360，粒子经度可能为负
+    if (meta.lonRange === '0-360' && lon < 0) {
+        lon += 360;
+    } else if (meta.lonRange === '-180-180' && lon > 180) {
+        lon -= 360;
+    }
+
     // 越界返回 null，粒子在边界处死亡
     // la1北边界，更大
     if (lon < bounds.lo1 || lon > bounds.lo2 ||

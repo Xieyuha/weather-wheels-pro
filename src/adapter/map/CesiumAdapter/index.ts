@@ -59,6 +59,18 @@ class CesiumAdapter implements IMapAdapter {
         };
     }
 
+    getViewBounds() {
+        if (!this.map) return undefined;
+        const rect = this.map.camera.computeViewRectangle();
+        if (!rect) return undefined;
+        return {
+            lo1: Cesium.Math.toDegrees(rect.west),
+            la1: Cesium.Math.toDegrees(rect.north),
+            lo2: Cesium.Math.toDegrees(rect.east),
+            la2: Cesium.Math.toDegrees(rect.south),
+        };
+    }
+
     getOverlayContainer(): HTMLElement {
         return this.map!.container as HTMLElement;
     }

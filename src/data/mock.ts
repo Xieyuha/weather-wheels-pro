@@ -34,8 +34,10 @@ function generateMockWindField(options: {
       dx: (bounds.lo2 - bounds.lo1) / (nx - 1),
       dy: (bounds.la1 - bounds.la2) / (ny - 1),
       timestamp: new Date().toISOString(),
-    },
-    u, v,
+      lonRange: bounds.lo1 < 0 ? '-180-180' : '0-360',
+    } as WindField['meta'],
+    u: new Float32Array(u),
+    v: new Float32Array(v),
   };
 }
 // # 生成北京地区 50x50 格点，西北风 8m/s 的 mock 数据

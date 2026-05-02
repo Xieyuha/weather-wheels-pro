@@ -28,6 +28,9 @@ export interface IMapAdapter {
     getOverlayContainer(): HTMLElement;
     // 当前视口尺寸
     getViewportSize(): { w: number; h: number };
+    // 当前相机可见范围（经纬度，-180~180 系统），用于约束粒子撒点区域
+    // 可选：不实现时粒子回退到风场全局 bounds
+    getViewBounds?(): { lo1: number; la1: number; lo2: number; la2: number } | undefined;
 }
 declare global {
     interface Window {

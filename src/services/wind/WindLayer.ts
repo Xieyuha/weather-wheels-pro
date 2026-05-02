@@ -1,7 +1,7 @@
 import type { IProjector } from "@/adapter/map/types";
 import type { IWindRenderer } from "./renderers/types";
 import { speedToRGB } from "./color";
-import type { WindField } from "./types";
+import type { WindField, WindBounds } from "./types";
 import { WindParticleSystem } from "./WindParticleSystem";
 
 export class WindLayer {
@@ -16,9 +16,10 @@ export class WindLayer {
     constructor(
         windField: WindField,
         renderer: IWindRenderer,
-        projector: IProjector
+        projector: IProjector,
+        spawnBounds?: WindBounds,
     ) {
-        this.system = new WindParticleSystem(windField)
+        this.system = new WindParticleSystem(windField, 2000, 0.008, spawnBounds)
         this.renderer = renderer
         this.projector = projector
     }

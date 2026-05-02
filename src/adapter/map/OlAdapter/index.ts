@@ -53,6 +53,16 @@ class OlAdapter implements IMapAdapter {
         };
     }
 
+    getViewBounds() {
+        if (!this.map) return undefined;
+        const size = this.map.getSize();
+        if (!size) return undefined;
+        const extent = this.map.getView().calculateExtent(size);
+        // extent 是 EPSG:3857，转换到 EPSG:4326 [minLon, minLat, maxLon, maxLat]
+        const [lo1, la2, lo2, la1] = transformExtent(extent, 'EPSG:3857', 'EPSG:4326') as [number, number, number, number];
+        return { lo1, la1, lo2, la2 };
+    }
+
     getOverlayContainer(): HTMLElement {
         return this.map!.getTargetElement() as HTMLElement;
     }

@@ -1,4 +1,4 @@
-import type { WindField, Particle, DrawCommand } from './types';
+import type { WindField, WindBounds, Particle, DrawCommand } from './types';
 import { createParticle, stepParticle } from './particle';
 import { sampleWind } from './interpolate';
 
@@ -9,9 +9,10 @@ export class WindParticleSystem {
         private windField: WindField,
         private count = 2000,
         private speedFactor = 0.008,
+        private spawnBounds: WindBounds = windField.meta.bounds,
     ) {
         this.particles = Array.from({ length: this.count },
-            () => createParticle(windField.meta.bounds)
+            () => createParticle(this.spawnBounds)
         );
     }
 
@@ -24,7 +25,7 @@ export class WindParticleSystem {
                 const alive = stepParticle(p, this.windField, this.speedFactor)
                 if (!alive) {
                     // 重置,这帧不绘制，可能造成粒子过度集中在边界，与闪烁，后续可以考虑淡出重置
-                    Object.assign(p, createParticle(this.windField.meta.bounds))
+                    Object.assign(p, createParticle(this.spawnBounds))
                     return
                 }
                 const wind = sampleWind(this.windField, p.lon, p.lat)
