@@ -27,12 +27,13 @@ export interface WindField {
         dx: number;      // 经度步长（度）
         dy: number;      // 纬度步长（度）
         timestamp: string;
+        lonRange: '0-360' | '-180-180';
     };
     // 表示在格点交界的数据
-    u: number[];       // 东西风分量 m/s，正=向东
-    v: number[];       // 南北风分量 m/s，正=向北
+    u: Float32Array;       // 东西风分量 m/s，正=向东
+    v: Float32Array;       // 南北风分量 m/s，正=向北
     // 3D 场景可选，W 分量通常极小
-    w?: number[];      // 垂直风分量 m/s  
+    w?: Float32Array;      // 垂直风分量 m/s  
 }
 
 export type WindBounds = WindField['meta']['bounds']
