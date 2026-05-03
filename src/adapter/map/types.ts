@@ -32,7 +32,7 @@ export interface IMapAdapter {
     // 可选：不实现时粒子回退到风场全局 bounds
     getViewBounds?(): { lo1: number; la1: number; lo2: number; la2: number } | undefined;
 
-    onViewChange(callback: (bounds: Bounds) => void): () => void;
+    onViewChange(callback: (bounds: Bounds | undefined) => void): () => void;
 }
 
 export type Bounds = { lo1: number; la1: number; lo2: number; la2: number }

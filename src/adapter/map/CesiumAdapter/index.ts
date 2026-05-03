@@ -6,7 +6,7 @@
 
 import * as Cesium from 'cesium';
 import 'cesium/Build/Cesium/Widgets/widgets.css';
-import type { IMapAdapter, IMapConfig, IProjector } from '../types';
+import type { IMapAdapter, IMapConfig, IProjector, Bounds } from '../types';
 
 class CesiumAdapter implements IMapAdapter {
     private map: Cesium.Viewer | null = null;
@@ -82,15 +82,21 @@ class CesiumAdapter implements IMapAdapter {
         };
     }
 
-    onViewChange(callback) {
+    onViewChange(callback: (bounds: Bounds | undefined) => void): () => void {
+        let timer: ReturnType<typeof setTimeout> | undefined;
         const handler = () => {
-            const bounds = this.getViewBounds();
-            callback(bounds);
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                callback(this.getViewBounds());
+            }, 200);
         };
-        // Cesium 用 moveEnd 比 changed 性能好（不在拖动过程中触发）
-        this.map!.camera.moveEnd.addEventListener(handler);
-        console.log('onviewchange registered');
-        return () => this.map!.camera.moveEnd.removeEventListener(handler);
+        // requestRenderMode 下 moveEnd 依赖"下一帧"才能检测到停止，而那一帧可能永远不被请求。
+        // camera.changed 在用户拖拽期间的每个渲染帧都会触发，防抖 300ms 后等价于 moveEnd。
+        this.map!.camera.changed.addEventListener(handler);
+        return () => {
+            clearTimeout(timer);
+            this.map!.camera.changed.removeEventListener(handler);
+        };
     }
 
     destroy(): void {
