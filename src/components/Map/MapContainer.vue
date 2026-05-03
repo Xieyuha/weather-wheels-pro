@@ -1,7 +1,6 @@
 <template>
     <div class="mapwrapper">
         <div id="mapContainer"></div>
-        <Header class="header"/>
     </div>
 </template>
 
@@ -10,10 +9,10 @@
     import { storeToRefs } from 'pinia';
     import { createMapAdapter } from '@/adapter/map/index';
     import type { IMapAdapter } from '@/adapter/map/types';
-    import Header from '../Panels/Header.vue';
     import { useMapStore } from '@/stores/useMapStore';
     import { createWindLayer } from '@/services/wind/index'
-import type { WindLayer } from '@/services/wind/WindLayer';
+    import type { WindLayer } from '@/services/wind/WindLayer';
+
     const map = shallowRef<IMapAdapter | null>(null);
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
@@ -62,14 +61,5 @@ import type { WindLayer } from '@/services/wind/WindLayer';
         height: 100%;
         overflow: hidden;
         position: absolute;
-    }
-
-    .header {
-        position: absolute;
-        top: 0;
-        right: 5%;
-        z-index: 10;
-        width: 20%;
-        height: 10%;
     }
 </style>

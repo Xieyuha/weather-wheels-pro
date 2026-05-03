@@ -5,8 +5,13 @@
                 <SiderNavBar />
                 <FeaturePanel />
             </el-aside>
-            <el-container class="map-container">
-                <MapContainer />
+            <el-container class="main-container">
+                <el-header class="app-header">
+                    <Header />
+                </el-header>
+                <el-main class="map-main">
+                    <MapContainer />
+                </el-main>
             </el-container>
         </el-container>
     </div>
@@ -22,12 +27,28 @@
 <style scoped>
     .sider-container {
         height: 100vh;
+        width: var(--layout-aside-width);
         display: flex;
     }
-    .map-container {
+
+    .main-container {
         height: 100vh;
         display: flex;
         flex-direction: column;
     }
 
+    .app-header {
+        height: var(--layout-header-height);
+        background: var(--bg-deep);
+        border-bottom: 1px solid var(--bg-border);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 24px;
+    }
+
+    .map-main {
+        flex: 1;
+        overflow: hidden;
+    }
 </style>

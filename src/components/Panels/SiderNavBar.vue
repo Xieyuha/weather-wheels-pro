@@ -56,7 +56,7 @@
 
 <style scoped>
     .sider-nav-bar {
-        width: 65px;
+        width: var(--layout-sider-width);
         height: 100%;
         background: var(--bg-deep);
         display: flex;
@@ -76,27 +76,27 @@
     .bar-item {
         width: 100%;
         height: 65px;
-        padding: 12px 12px;
+        padding: 12px;
         position: relative;
         display: flex;
-        color: #98989a;
+        color: var(--text-muted);
         justify-content: center;
         align-items: center;
         border-left: 3px solid transparent;
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: var(--transition-base);
 
         &:hover {
-            color: #d2b0a2;
+            color: var(--color-primary-hover);
             background: var(--gradient-bg-card);
-            border-left: 3px solid #b55e40;
+            border-left-color: var(--color-primary);
         }
     }
 
     .bar-item.active {
-        color: #d2b0a2;
+        color: var(--color-primary-hover);
         background: var(--gradient-bg-card);
-        border-left: 3px solid #b55e40;
+        border-left-color: var(--color-primary);
     }
 
     .icon {
@@ -106,18 +106,17 @@
 
     .logo {
         width: 100%;
-        height: 65px;
-        padding: 12px 12px;
-        position: relative;
+        height: var(--layout-header-height);
+        padding: 12px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-bottom: 1.5px solid var(--bg-border);
-        color: #ffd8c2;
-        background-color: #b55e40;
+        border-bottom: 1px solid var(--bg-border);
+        color: var(--color-primary-light);
+        background-color: var(--color-primary);
     }
 
     .exit {
-        border-top: 1.5px solid var(--bg-border);
+        border-top: 1px solid var(--bg-border);
     }
 </style>

@@ -21,33 +21,34 @@
     }
 
     .feature-panel {
-        width: 370px;
+        width: var(--layout-feature-panel-width);
         height: 100%;
         background: var(--bg-panel);
+        border-right: 1px solid var(--bg-border);
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
 
     .header {
-        height: 65px;
-        border: 1.5px solid var(--bg-border);
-        border-top: none;
-        padding: 20px 20px;
-        color: var(--h1-color);
-        font-size: var(--h1-font-size);
+        height: var(--layout-header-height);
+        padding: 0 20px;
+        color: var(--text-main);
+        font-size: var(--font-size-h1);
+        border-bottom: 1px solid var(--bg-border);
         display: flex;
         align-items: center;
     }
 
     .content {
-        height: calc(100% - 65px);
-        border: 1.5px solid var(--bg-border);
-        border-top: none;
+        flex: 1;
         padding: 20px;
+        overflow: auto;
     }
 
     .card {
         height: 250px;
-        border: 1.5px solid var(--bg-border);
+        border: 1px solid var(--bg-border);
         background: var(--gradient-bg-card);
         border-radius: var(--panel-border-radius);
     }
