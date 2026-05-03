@@ -1,56 +1,113 @@
 :root {
-  /* === 核心主题色 === */
-  /* 品牌主色：活力橙 */
-  --color-primary: #FF5A30;
-  --color-primary-hover: #FF7A50;
-  --color-primary-light: #FFD8C2;
-  --color-primary-soft: rgba(255, 90, 48, 0.12);
-  /* 辅助色：科技蓝（地图轨迹/链接/信息提示） */
-  --color-secondary: #409EFF;
+  /* ===== 主题色 ===== */
+  /* 暖橙：terracotta 风，比 #FF5A30 更克制更耐看 */
+  --color-primary: #EC6A3D;
+  --color-primary-hover: #FF8259;
+  --color-primary-active: #D45A30;
+  --color-primary-soft: rgba(236, 106, 61, 0.1);
+  --color-primary-glow: rgba(236, 106, 61, 0.22);
+  --color-primary-light: #FFE0CE;
 
-  /* === 4 级背景色 === */
-  --bg-deep: #292a2e;       /* 最深：左侧窄导航 */
-  --bg-panel: #2f2f37;      /* 次深：侧边面板底色 */
-  --bg-card: #292B32;       /* 稍亮：卡片/列表项 */
-  --bg-hover: #32343C;      /* 最亮：输入框/悬浮态 */
-  --bg-border: #41484e;     /* 边线 */
+  /* 辅助蓝：路径、信息提示、链接 */
+  --color-secondary: #4F8FF7;
+  --color-secondary-soft: rgba(79, 143, 247, 0.1);
 
-  /* === 文字颜色 === */
-  --text-main: #FFFFFF;
-  --text-secondary: #A0A0A0;
-  --text-muted: #98989a;
-  --text-placeholder: #505050;
+  /* 状态色 */
+  --color-success: #3FB57F;
+  --color-warning: #E6B655;
+  --color-danger: #E06464;
 
-  /* === 渐变 === */
-  --gradient-primary: linear-gradient(135deg, #FF8C60 0%, #FF5A30 100%);
-  --gradient-route: linear-gradient(90deg, #409EFF 0%, #FF5A30 100%);
-  --gradient-bg-deep: linear-gradient(180deg, #2A2B30 0%, #18191D 100%);
-  --gradient-bg-panel: linear-gradient(180deg, #2d3035 0%, #30333a 50%);
-  --gradient-bg-card: linear-gradient(180deg, #475059 20%, #474d5b 80%);
-  --gradient-radial-glow: radial-gradient(circle at 50% 0%, #32343C 0%, #18191D 100%);
-  --gradient-radial-soft: radial-gradient(circle, #2C2E34 0%, #18191D 100%);
+  /* ===== 背景层次（5 级，真正拉开对比） ===== */
+  --bg-base: #0E1014;       /* 0. 最深：viewport 底色/深邃感来源 */
+  --bg-deep: #14171C;       /* 1. 窄导航底色 */
+  --bg-panel: #1A1D24;      /* 2. 主面板（侧边/header） */
+  --bg-card: #20242C;       /* 3. 卡片/列表项 */
+  --bg-hover: #2A2E37;      /* 4. 悬浮态/输入框 */
+  --bg-elevated: #2F343E;   /* 5. 弹出层 popper */
 
-  /* === 布局尺寸 === */
-  --layout-header-height: 60px;
-  --layout-sider-width: 65px;
-  --layout-feature-panel-width: 370px;
+  /* ===== 边框（半透明白，柔和分隔） ===== */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* ===== 文字（避免纯白，减少疲劳） ===== */
+  --text-primary: #EAECEF;
+  --text-secondary: #9DA1A8;
+  --text-tertiary: #6B6F77;
+  --text-disabled: #3F4248;
+  --text-placeholder: #4A4D54;
+
+  /* ===== 渐变 ===== */
+  --gradient-primary: linear-gradient(135deg, #FF8259 0%, #EC6A3D 60%, #D45A30 100%);
+  --gradient-route: linear-gradient(90deg, #4F8FF7 0%, #EC6A3D 100%);
+  --gradient-panel: linear-gradient(180deg, #1A1D24 0%, #16191F 100%);
+  --gradient-card: linear-gradient(180deg, #232730 0%, #1D2027 100%);
+  --gradient-radial-glow: radial-gradient(circle at 50% 0%, #2A2E37 0%, #0E1014 70%);
+
+  /* ===== 阴影（深色 UI 的层次感来源） ===== */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 24px var(--color-primary-glow);
+  --shadow-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* ===== 圆角 ===== */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* ===== 布局尺寸 ===== */
+  --layout-header-height: 56px;
+  --layout-sider-width: 64px;
+  --layout-feature-panel-width: 360px;
   --layout-aside-width: calc(var(--layout-sider-width) + var(--layout-feature-panel-width));
+  --layout-bar-item-height: 60px;
 
-  --panel-border-radius: 8px;
+  /* ===== 排版 ===== */
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-h2: 18px;
+  --font-size-h1: 20px;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-tighter: -0.02em;
 
-  /* === 排版 === */
-  --font-size-h1: 1.5rem;
-
-  /* === 过渡 === */
-  --transition-base: all 0.2s ease;
+  /* ===== 过渡 ===== */
+  --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-color: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  --transition-transform: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* === Element Plus 变量映射 === */
+  /* ===== Element Plus 变量映射 ===== */
   --el-color-primary: var(--color-primary);
+  --el-color-primary-light-3: var(--color-primary-hover);
+  --el-color-primary-light-9: var(--color-primary-soft);
   --el-bg-color: var(--bg-panel);
-  --el-text-color-primary: var(--text-main);
+  --el-bg-color-overlay: var(--bg-elevated);
+  --el-bg-color-page: var(--bg-base);
+  --el-text-color-primary: var(--text-primary);
   --el-text-color-regular: var(--text-secondary);
-  --el-input-bg-color: var(--bg-deep);
+  --el-text-color-secondary: var(--text-tertiary);
+  --el-text-color-placeholder: var(--text-placeholder);
+  --el-text-color-disabled: var(--text-disabled);
+  --el-border-color: var(--border-default);
+  --el-border-color-light: var(--border-subtle);
+  --el-border-color-lighter: var(--border-subtle);
+  --el-border-color-extra-light: var(--border-subtle);
+  --el-fill-color: var(--bg-card);
+  --el-fill-color-light: var(--bg-hover);
+  --el-fill-color-blank: var(--bg-deep);
+  --el-input-bg-color: var(--bg-card);
+  --el-input-border-color: var(--border-default);
+  --el-input-hover-border-color: var(--border-strong);
+  --el-button-bg-color: var(--bg-card);
+  --el-button-border-color: var(--border-default);
+  --el-button-hover-bg-color: var(--bg-hover);
+  --el-button-hover-border-color: var(--color-primary);
+  --el-button-hover-text-color: var(--color-primary-hover);
   --el-header-height: var(--layout-header-height);
   --el-aside-width: var(--layout-aside-width);
 }

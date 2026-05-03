@@ -25,26 +25,36 @@
 </script>
 
 <style scoped>
+    .home-view {
+        background: var(--bg-base);
+    }
+
     .sider-container {
         height: 100vh;
         width: var(--layout-aside-width);
         display: flex;
+        position: relative;
+        z-index: 2;
+        box-shadow: var(--shadow-md);
     }
 
     .main-container {
         height: 100vh;
         display: flex;
         flex-direction: column;
+        position: relative;
     }
 
     .app-header {
         height: var(--layout-header-height);
-        background: var(--bg-deep);
-        border-bottom: 1px solid var(--bg-border);
+        background: var(--bg-panel);
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        padding: 0 24px;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 1px 0 var(--border-subtle), var(--shadow-sm);
     }
 
     .map-main {

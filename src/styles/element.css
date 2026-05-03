@@ -1,3 +1,4 @@
+/* Element Plus 容器重置 */
 .el-header,
 .el-footer,
 .el-main,
@@ -6,4 +7,62 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+/* === Button === */
+.el-button {
+  --el-button-text-color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-base);
+}
+
+.el-button.is-text:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+
+.el-button:not(.is-text):hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* === Input / Select === */
+.el-input__wrapper {
+  background-color: var(--bg-card);
+  box-shadow: 0 0 0 1px var(--border-default) inset !important;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-color);
+}
+
+.el-input__wrapper:hover {
+  box-shadow: 0 0 0 1px var(--border-strong) inset !important;
+}
+
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 1px var(--color-primary) inset !important;
+}
+
+/* === Popper（下拉、tooltip） === */
+.el-popper.is-light,
+.el-select__popper {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-default) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.el-select-dropdown__item {
+  color: var(--text-secondary);
+}
+
+.el-select-dropdown__item:hover,
+.el-select-dropdown__item.hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+
+.el-select-dropdown__item.is-selected {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
 }

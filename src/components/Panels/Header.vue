@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <el-button>Date</el-button>
+        <el-button class="ghost-btn">Date</el-button>
         <el-select
             v-model="mapType"
             class="map-select"
@@ -8,14 +8,14 @@
             size="small"
         >
             <el-option
-            v-for="(value, index) in MapType"
-            :key="index"
-            :label="value"
-            :value="value"
+                v-for="(value, index) in MapType"
+                :key="index"
+                :label="value"
+                :value="value"
             />
         </el-select>
-        <el-button>Profile</el-button>
-        <el-button>Settings</el-button>
+        <el-button class="ghost-btn">Profile</el-button>
+        <el-button class="ghost-btn">Settings</el-button>
     </div>
 </template>
 
@@ -33,10 +33,33 @@
         display: flex;
         gap: 8px;
         align-items: center;
-        color: var(--text-main);
+    }
+
+    .ghost-btn {
+        --el-button-bg-color: transparent;
+        --el-button-border-color: var(--border-subtle);
+        --el-button-text-color: var(--text-secondary);
+        --el-button-hover-bg-color: var(--bg-hover);
+        --el-button-hover-border-color: var(--border-strong);
+        --el-button-hover-text-color: var(--text-primary);
+        height: 32px;
+        padding: 0 14px;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
+        letter-spacing: var(--letter-spacing-tight);
     }
 
     :deep(.el-select) {
-        width: 100px;
+        width: 110px;
+    }
+
+    :deep(.el-select .el-input__wrapper) {
+        height: 32px;
+        background: transparent !important;
+        box-shadow: 0 0 0 1px var(--border-subtle) inset !important;
+    }
+
+    :deep(.el-select .el-input__wrapper:hover) {
+        box-shadow: 0 0 0 1px var(--border-strong) inset !important;
     }
 </style>
