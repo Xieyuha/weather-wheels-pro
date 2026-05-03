@@ -82,6 +82,17 @@ class CesiumAdapter implements IMapAdapter {
         };
     }
 
+    onViewChange(callback) {
+        const handler = () => {
+            const bounds = this.getViewBounds();
+            callback(bounds);
+        };
+        // Cesium 用 moveEnd 比 changed 性能好（不在拖动过程中触发）
+        this.map!.camera.moveEnd.addEventListener(handler);
+        console.log('onviewchange registered');
+        return () => this.map!.camera.moveEnd.removeEventListener(handler);
+    }
+
     destroy(): void {
         if (this.map) {
             this.map.destroy();

@@ -1,11 +1,11 @@
 import type { IMapConfig } from "../types";
-import type { IMapAdapter, IProjector } from "../types";
+import type { IMapAdapter, IProjector, Bounds } from "../types";
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import { ImageTile } from "ol/source";
 import OSM from 'ol/source/OSM';
-import { fromLonLat } from "ol/proj";
+import { fromLonLat, transformExtent } from "ol/proj";
 class OlAdapter implements IMapAdapter {
     private map: Map | null = null;
     private container: string;
@@ -72,6 +72,13 @@ class OlAdapter implements IMapAdapter {
             w: this.map!.getTargetElement().clientWidth,
             h: this.map!.getTargetElement().clientHeight,
         };
+    }
+
+    onViewChange(callback): () => void {
+        const handler = () => callback(this.getViewBounds());
+        // OL 用 moveend 事件
+        this.map.on('moveend', handler);
+        return () => this.map.un('moveend', handler);
     }
 
     destroy(): void {
