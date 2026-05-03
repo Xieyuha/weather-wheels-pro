@@ -16,6 +16,11 @@ export class WindParticleSystem {
         );
     }
 
+    updateSpawnBounds(bounds: WindBounds | undefined) {
+        if (bounds) this.spawnBounds = bounds
+        console.log('Updated spawn bounds:', this.spawnBounds);
+    }
+
     // 步进所有粒子，输出要画什么，但不管怎么画
     step(): DrawCommand[] {
         try {

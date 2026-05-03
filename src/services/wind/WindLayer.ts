@@ -1,43 +1,51 @@
-import type { IProjector } from "@/adapter/map/types";
+import type { IMapAdapter } from "@/adapter/map/types";
 import type { IWindRenderer } from "./renderers/types";
 import { speedToRGB } from "./color";
 import type { WindField, WindBounds } from "./types";
 import { WindParticleSystem } from "./WindParticleSystem";
 
 export class WindLayer {
-    // 调用system初始化粒子
     private system: WindParticleSystem
-    // projection统一投影与屏幕坐标
-    private projector: IProjector
-    // 调用render内对应渲染方法
-    // TODO: renderer的实例化位置
+    private mapAdapter: IMapAdapter
     private renderer: IWindRenderer
     private rafId = 0
+    private unsubscribeViewChange?: () => void
+
     constructor(
         windField: WindField,
         renderer: IWindRenderer,
-        projector: IProjector,
+        mapAdapter: IMapAdapter,
         spawnBounds?: WindBounds,
     ) {
         this.system = new WindParticleSystem(windField, 2000, 0.008, spawnBounds)
         this.renderer = renderer
-        this.projector = projector
+        this.mapAdapter = mapAdapter
+        this.unsubscribeViewChange = mapAdapter.onViewChange(bounds => {
+            this.system.updateSpawnBounds(bounds)
+        })
     }
+
     start = () => {
         this.rafId = requestAnimationFrame(this.frame)
     }
+
     stop() {
         cancelAnimationFrame(this.rafId)
     }
-    // 有projector方法，有
+
+    destroy() {
+        this.stop()
+        this.unsubscribeViewChange?.()
+    }
+
     private frame = () => {
         const commands = this.system.step()
+        const projector = this.mapAdapter.getProjector()
         this.renderer.beginFrame()
         for (const cmd of commands) {
-            const from = this.projector.project(cmd.prevLon, cmd.prevLat)
-            const to = this.projector.project(cmd.lon, cmd.lat)
-            const speed = cmd.speed
-            const [r, g, b] = speedToRGB(speed)
+            const from = projector.project(cmd.prevLon, cmd.prevLat)
+            const to = projector.project(cmd.lon, cmd.lat)
+            const [r, g, b] = speedToRGB(cmd.speed)
             if (from == null || to == null) continue
             this.renderer.addSegment(
                 from.x, from.y,

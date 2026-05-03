@@ -27,19 +27,18 @@ import type { WindLayer } from '@/services/wind/WindLayer';
             mapType: mapType.value,
         });
         await mapStore.setMap(map.value);
-
         windLayer.value = await createWindLayer(map.value);
 
     });
     onUnmounted(() => {
-        windLayer.value?.stop()
+        windLayer.value?.destroy()
         windLayer.value = null
         mapStore.destroyMap()
         map.value = null;
     });
 
     watch(mapType, async(newMapType) => {
-        windLayer.value?.stop()
+        windLayer.value?.destroy()
         windLayer.value = null
         mapStore.destroyMap()
         map.value = createMapAdapter({

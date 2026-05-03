@@ -9,7 +9,6 @@ export async function createWindLayer(mapAdapter: IMapAdapter) {
   console.log('Wind data loaded:', windField);
   const container = mapAdapter.getOverlayContainer();
   const { w: width, h: height } = mapAdapter.getViewportSize();
-  const projector = mapAdapter.getProjector();
   // linewidth和fadeOpacity可以根据粒子年龄或者速度做成渐变的，暂时先写死
   const render = new CanvasWindRenderer(
     { fadeOpacity: 0.88, lineWidth: 1.5 },
@@ -20,7 +19,7 @@ export async function createWindLayer(mapAdapter: IMapAdapter) {
   const windlayer = new WindLayer(
     windField,
     render,
-    projector,
+    mapAdapter,
     spawnBounds,
   )
   windlayer.start()
