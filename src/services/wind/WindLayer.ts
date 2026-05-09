@@ -45,7 +45,8 @@ export class WindLayer {
         for (const cmd of commands) {
             const from = projector.project(cmd.prevLon, cmd.prevLat)
             const to = projector.project(cmd.lon, cmd.lat)
-            const [r, g, b] = speedToRGB(cmd.speed)
+            // const [r, g, b] = speedToRGB(cmd.speed)
+            const r = 255, g = 255, b = 255
             if (from == null || to == null) continue
             this.renderer.addSegment(
                 from.x, from.y,
