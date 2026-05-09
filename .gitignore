@@ -7,6 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+docs
+mocks
+public/wind
 node_modules
 .DS_Store
 dist
@@ -38,3 +41,4 @@ __screenshots__/
 # Vite
 *.timestamp-*-*.mjs
 .env.development
+docs/ARCHITECTURE_ANALYSIS.md

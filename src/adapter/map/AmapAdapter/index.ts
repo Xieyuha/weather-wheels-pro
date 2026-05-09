@@ -1,16 +1,14 @@
-import type { IMapAdapter, MapType } from "../types";
+import type { IMapAdapter, MapType, IMapConfig } from "../types";
 import AMap from "@amap/amap-jsapi-loader";
 import plugins from "./plugins";
 import { MAP_CONFIG } from "@/config";
 
 class AmapAdapter implements IMapAdapter {
     private map: any;
-    container: string;
-    mapType: MapType;
+    private container: string;
 
-    constructor(options: IMapAdapter) {
-        this.container = options.container;
-        this.mapType = options.mapType;
+    constructor(config: IMapConfig) {
+        this.container = config.container;
     }
 
     async init(): Promise<void> {
@@ -30,7 +28,16 @@ class AmapAdapter implements IMapAdapter {
             });
             this.map = amap;
         } catch (error) {
-            console.error('Failed to load AMap JSAPI', error);
+            console.error('Failed to initialize AMap', error);
+        }
+    }
+    getMap() {
+        return this.map;
+    }
+    destroy(): void {
+        if (this.map) {
+            this.map.destroy();
+            this.map = null;
         }
     }
 }
