@@ -9,6 +9,7 @@ lerna-debug.log*
 
 docs
 mocks
+public/wind
 node_modules
 .DS_Store
 dist
