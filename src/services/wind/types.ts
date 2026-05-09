@@ -27,6 +27,7 @@ export interface WindField {
         dx: number;      // 经度步长（度）
         dy: number;      // 纬度步长（度）
         timestamp: string;
+<<<<<<< HEAD
         lonRange: '0-360' | '-180-180';
     };
     // 表示在格点交界的数据
@@ -52,3 +53,14 @@ export interface DrawCommand {
     speed: number;   // 用于着色
     alpha: number;   // 生命周期透明度
 }
+=======
+    };
+    // 表示在格点交界的数据
+    u: number[];       // 东西风分量 m/s，正=向东
+    v: number[];       // 南北风分量 m/s，正=向北
+    // 3D 场景可选，W 分量通常极小
+    w?: number[];      // 垂直风分量 m/s  
+}
+
+export type { WindField }
+>>>>>>> e794199d47763ef6bf4db4a3ea2bc5ee04c47253

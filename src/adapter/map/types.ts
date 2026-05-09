@@ -18,6 +18,10 @@ export interface IProjector {
 // 地图适配器接口
 export interface IMapAdapter {
     init(): Promise<void>;
+    // 添加各种方法的组装与暴露，manage管理子文件夹
+    // 要素、图层、
+    // 事件总线：缩放->请求(优化)
+    // 视角
     destroy(): void;
     getMap(): unknown;
 

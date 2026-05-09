@@ -23,6 +23,7 @@
     import { useMapStore } from '@/stores/useMapStore';
     import { storeToRefs } from 'pinia';
     import { MapType } from '@/adapter/map/types';
+import { Model } from 'cesium';
 
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
