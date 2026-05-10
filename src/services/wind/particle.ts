@@ -1,10 +1,5 @@
 import type { WindField, WindBounds, Particle } from './types';
 import { sampleWind } from './interpolate';
-
-// const METERS_PER_DEGREE = 111000; // 完善投影后使用
-// TODO: 与speedFactor耦合
-const METERS_PER_DEGREE = 50;
-
 /**
  * 随机撒点
  * @param bounds 风场粒子边界
@@ -30,13 +25,14 @@ export function createParticle(bounds: WindBounds): Particle {
 export function stepParticle(
     p: Particle,
     windField: WindField,
-    speedFactor = 0.008
+    speedFactor: number,
+    meterperDegree: number
 ): boolean {
     const wind = sampleWind(windField, p.lon, p.lat);
     if (!wind || p.age >= p.maxAge) return false;
     const cosLat = Math.cos((p.lat * Math.PI) / 180);
-    p.lon += (wind.u * speedFactor) / (METERS_PER_DEGREE * cosLat);
-    p.lat += (wind.v * speedFactor) / METERS_PER_DEGREE;
+    p.lon += (wind.u * speedFactor) / (meterperDegree * cosLat);
+    p.lat += (wind.v * speedFactor) / meterperDegree;
     p.age++;
     return true;
 }

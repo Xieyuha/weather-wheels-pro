@@ -41,6 +41,13 @@ export class CanvasWindRenderer implements IWindRenderer {
         this.canvas.height = h;
     }
 
+    updateOptions(options: { fadeOpacity: number; lineWidth: number }) {
+        this.fadeOpacity = options.fadeOpacity
+        this.lineWidth = options.lineWidth
+        const make = (i: number) => `rgba(255,255,255,${this.fadeOpacity * (i + 1) / 4})`
+        this.strokeStyles = [make(0), make(1), make(2), make(3)]
+    }
+
     beginFrame() {
         const ctx = this.ctx;
         ctx.globalCompositeOperation = 'destination-in'

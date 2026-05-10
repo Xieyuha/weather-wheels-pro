@@ -10,24 +10,32 @@
     import { createMapAdapter } from '@/adapter/map/index';
     import type { IMapAdapter } from '@/adapter/map/types';
     import { useMapStore } from '@/stores/useMapStore';
-    import { createWindLayer } from '@/services/wind/index'
-    import type { WindLayer } from '@/services/wind/WindLayer';
+    import { createWindLayer } from '@/layers/wind/index';
+    
+    import WindService from '@/services/wind/WindService';
+    import { WindHeatmapLayer } from '@/services/wind/WindHeatmapLayer';
+    import { MapType } from '@/adapter/map/types';
+    import type OlAdapter from '@/adapter/map/OlAdapter';
 
     const map = shallowRef<IMapAdapter | null>(null);
     const mapStore = useMapStore();
     const { mapType } = storeToRefs(mapStore);
 
-    const windLayer = shallowRef<WindLayer | null>(null);
+    const windLayer = shallowRef<any | null>(null);
+    let windField: Awaited<ReturnType<WindService['getWindData']>> | undefined;
     onMounted(async () => {
         if (map.value) return;
+        windField = await new WindService().getWindData();
         map.value = createMapAdapter({
             container: 'mapContainer',
             // 组件通信传递mapType
             mapType: mapType.value,
         });
         await mapStore.setMap(map.value);
-        windLayer.value = await createWindLayer(map.value);
-
+        windLayer.value = await createWindLayer(map.value, windField);
+        if (mapType.value === MapType.Openlayers) {
+            // new WindHeatmapLayer(windField, map.value as OlAdapter);
+        }
     });
     onUnmounted(() => {
         windLayer.value?.destroy()
@@ -36,7 +44,7 @@
         map.value = null;
     });
 
-    watch(mapType, async(newMapType) => {
+    watch(mapType, async (newMapType) => {
         windLayer.value?.destroy()
         windLayer.value = null
         mapStore.destroyMap()
@@ -45,7 +53,9 @@
             mapType: newMapType,
         });
         await mapStore.setMap(map.value);
-        windLayer.value = await createWindLayer(map.value);
+        if (!windField) return;
+         windLayer.value = await createWindLayer(map.value, windField);
+
     });
 </script>
 
