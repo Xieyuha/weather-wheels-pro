@@ -13,7 +13,7 @@ interface IMapStore {
 export const useMapStore = defineStore('map', {
     state: (): IMapStore => ({
         mapInstance: null as IMapAdapter | null,
-        mapType: MapType.Cesium,
+        mapType: MapType.Openlayers,
         isMapLoading: false,
         isMapReady: false,
     }),
