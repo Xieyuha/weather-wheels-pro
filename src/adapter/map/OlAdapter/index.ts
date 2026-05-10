@@ -84,10 +84,8 @@ class OlAdapter implements IMapAdapter {
     }
 
     getViewportSize(): { w: number; h: number } {
-        return {
-            w: this.getMapInstance().getTargetElement().clientWidth,
-            h: this.getMapInstance().getTargetElement().clientHeight,
-        };
+        const size = this.getMapInstance().getSize() ?? [0, 0];
+        return { w: size[0]!, h: size[1]! };
     }
 
     onViewChange(callback: (bounds: Bounds | undefined) => void): () => void {
