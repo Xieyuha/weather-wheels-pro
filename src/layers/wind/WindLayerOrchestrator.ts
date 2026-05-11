@@ -5,7 +5,6 @@ import { HeatmapLayer } from "./HeatmapLayer";
 export class WindLayerOrchestrator {
     private mapadapter: IMapAdapter
     private windField: WindField
-    private level: number = 0
     private particleLayer: ParticleLayer | null = null
     private heatmapLayer: HeatmapLayer | null = null
 
@@ -15,7 +14,6 @@ export class WindLayerOrchestrator {
     ) {
         this.windField = windField
         this.mapadapter = mapAdapter
-
     }
 
     async start() {
@@ -23,20 +21,20 @@ export class WindLayerOrchestrator {
         this.particleLayer = new ParticleLayer(
             this.windField,
             this.mapadapter,
-            this.level,
             spawnBounds
         )
         this.particleLayer.start()
     }
 
-
+    updateByHeight(cameraHeight: number) {
+        this.particleLayer?.updateByHeight(cameraHeight)
+    }
     // lod切换时更新风场数据
     updateWindField(windField: WindField) {
         this.windField = windField
         // store那里根据视口传入level，这里把level私有化，再传给各个图层
         // 图层内部进行判断，改变线宽与移动速度
-        this.level = 1
-        this.particleLayer?.updateWindField(windField, this.level)
+        this.particleLayer?.updateWindField(windField)
     }
 
     destroy() {

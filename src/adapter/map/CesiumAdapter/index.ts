@@ -36,6 +36,7 @@ class CesiumAdapter implements IMapAdapter {
             viewer.camera.setView({
                 destination: Cesium.Cartesian3.fromDegrees(116.397428, 39.90923, 50000),
             })
+            viewer.camera.percentageChanged = 0.05;
             this.map = viewer;
         } catch (error) {
             console.error('Failed to initialize Cesium', error);
@@ -82,6 +83,10 @@ class CesiumAdapter implements IMapAdapter {
         };
     }
 
+    getViewHeight(): number {
+        return this.map!.camera.positionCartographic.height;
+    }
+
     onViewChange(callback: (bounds: Bounds | undefined) => void): () => void {
         let timer: ReturnType<typeof setTimeout> | undefined;
         const handler = () => {
@@ -97,6 +102,17 @@ class CesiumAdapter implements IMapAdapter {
             clearTimeout(timer);
             this.map!.camera.changed.removeEventListener(handler);
         };
+    }
+
+    onLodChange(callback: (level: 0 | 1 | 2) => void): () => void {
+        const handler = () => {
+            const height = this.map!.camera.positionCartographic.height
+            const level = height > 3_000_000 ? 0 : height > 500_000 ? 1 : 2
+            console.log('Camera height:', height, '=> LOD level:', level)
+            callback(level)
+        }
+        this.map!.camera.changed.addEventListener(handler)
+        return () => this.map!.camera.changed.removeEventListener(handler)
     }
 
     destroy(): void {

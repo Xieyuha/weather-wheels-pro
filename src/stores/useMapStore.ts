@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 import { markRaw } from 'vue';
 import { MapType } from '@/adapter/map/types';
 import type { IMapAdapter } from '@/adapter/map/types';
-
 interface IMapStore {
     mapInstance: IMapAdapter | null;
     mapType: MapType;
     isMapLoading: boolean;
     isMapReady: boolean;
+    zoomLevel: number;
 }
 
 export const useMapStore = defineStore('map', {
@@ -16,6 +16,7 @@ export const useMapStore = defineStore('map', {
         mapType: MapType.Openlayers,
         isMapLoading: false,
         isMapReady: false,
+        zoomLevel: 0,
     }),
     actions: {
         async setMap(adapter: IMapAdapter) {
@@ -34,6 +35,9 @@ export const useMapStore = defineStore('map', {
                     this.isMapLoading = false;
                     this.isMapReady = false;
                 });
+        },
+        setZoomLevel(level: 0 | 1 | 2) {
+            this.zoomLevel = level;
         },
         destroyMap() {
             this.mapInstance?.destroy();

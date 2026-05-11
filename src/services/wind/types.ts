@@ -52,3 +52,5 @@ export interface DrawCommand {
     speed: number;   // 用于着色
     alpha: number;   // 生命周期透明度
 }
+
+export type Resolution = 1.0 | 0.5 | 0.25;

@@ -5,15 +5,14 @@
 </template>
 
 <script setup lang="ts">
-    import { onMounted, onUnmounted, shallowRef, watch } from 'vue';
+    import { computed, onMounted, onUnmounted, shallowRef, watch } from 'vue';
     import { storeToRefs } from 'pinia';
     import { createMapAdapter } from '@/adapter/map/index';
     import type { IMapAdapter } from '@/adapter/map/types';
     import { useMapStore } from '@/stores/useMapStore';
     import { createWindLayer } from '@/layers/wind/index';
-    
+    import { useWindLOD } from '@/composable/useWindLod';
     import WindService from '@/services/wind/WindService';
-    import { WindHeatmapLayer } from '@/services/wind/WindHeatmapLayer';
     import { MapType } from '@/adapter/map/types';
     import type OlAdapter from '@/adapter/map/OlAdapter';
 
@@ -23,16 +22,19 @@
 
     const windLayer = shallowRef<any | null>(null);
     let windField: Awaited<ReturnType<WindService['getWindData']>> | undefined;
+
     onMounted(async () => {
         if (map.value) return;
-        windField = await new WindService().getWindData();
+        windField = await new WindService().getWindData(0.25);
         map.value = createMapAdapter({
             container: 'mapContainer',
             // 组件通信传递mapType
             mapType: mapType.value,
         });
         await mapStore.setMap(map.value);
+
         windLayer.value = await createWindLayer(map.value, windField);
+        useWindLOD(map.value, windLayer.value)
         if (mapType.value === MapType.Openlayers) {
             // new WindHeatmapLayer(windField, map.value as OlAdapter);
         }
@@ -54,8 +56,8 @@
         });
         await mapStore.setMap(map.value);
         if (!windField) return;
-         windLayer.value = await createWindLayer(map.value, windField);
-
+        windLayer.value = await createWindLayer(map.value, windField);
+        useWindLOD(map.value, windLayer.value)
     });
 </script>
 

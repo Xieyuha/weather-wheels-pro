@@ -88,12 +88,30 @@ class OlAdapter implements IMapAdapter {
         return { w: size[0]!, h: size[1]! };
     }
 
+    getViewHeight(): number {
+        const map = this.getMapInstance();
+        const zoom = map.getView().getZoom() ?? 0;
+        // zoom 0~18 映射到高度
+        return 15_000_000 / Math.pow(2, zoom);  // 粗略公式够用
+    }
+
     onViewChange(callback: (bounds: Bounds | undefined) => void): () => void {
         const map = this.getMapInstance();
         const handler = () => callback(this.getViewBounds());
         // OL 用 moveend 事件
         map.on('moveend', handler);
         return () => map.un('moveend', handler);
+    }
+
+    onLodChange(callback: (level: 0 | 1 | 2) => void): () => void {
+        const map = this.getMapInstance();
+        const handler = () => {
+            const zoom = map.getView().getZoom() ?? 0
+            const level = zoom < 5 ? 0 : zoom < 9 ? 1 : 2
+            callback(level)
+        }
+        map.on('moveend', handler)
+        return () => map.un('moveend', handler)
     }
 
     destroy(): void {
