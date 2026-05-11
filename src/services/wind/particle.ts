@@ -25,14 +25,13 @@ export function createParticle(bounds: WindBounds): Particle {
 export function stepParticle(
     p: Particle,
     windField: WindField,
-    speedFactor: number,
-    meterperDegree: number
+    scale: number,
 ): boolean {
     const wind = sampleWind(windField, p.lon, p.lat);
     if (!wind || p.age >= p.maxAge) return false;
     const cosLat = Math.cos((p.lat * Math.PI) / 180);
-    p.lon += (wind.u * speedFactor) / (meterperDegree * cosLat);
-    p.lat += (wind.v * speedFactor) / meterperDegree;
+    p.lon += (wind.u * scale) / cosLat;
+    p.lat += wind.v * scale;
     p.age++;
     return true;
 }

@@ -8,9 +8,9 @@ export class WindParticleSystem {
     constructor(
         private windField: WindField,
         private count: number,
-        private speedFactor: number,
+        private scale: number,
+        private maxAlpha: number,
         private spawnBounds: WindBounds = windField.meta.bounds,
-        private meterperDegree: number ,
     ) {
         this.particles = Array.from({ length: this.count },
             () => createParticle(this.spawnBounds)
@@ -28,7 +28,7 @@ export class WindParticleSystem {
             const commands: DrawCommand[] = []
             this.particles.forEach(p => {
                 const prevLon = p.lon, prevLat = p.lat
-                const alive = stepParticle(p, this.windField, this.speedFactor, this.meterperDegree)
+                const alive = stepParticle(p, this.windField, this.scale)
                 if (!alive) {
                     // 重置,这帧不绘制，可能造成粒子过度集中在边界，与闪烁，后续可以考虑淡出重置
                     Object.assign(p, createParticle(this.spawnBounds))
@@ -42,7 +42,7 @@ export class WindParticleSystem {
                     lon: p.lon,
                     lat: p.lat,
                     speed: Math.sqrt(wind.u ** 2 + wind.v ** 2),
-                    alpha: Math.min(p.age / 15, 1) * 0.35,
+                    alpha: Math.min(p.age / 15, 1) * this.maxAlpha,
                 })
             })
             return commands
