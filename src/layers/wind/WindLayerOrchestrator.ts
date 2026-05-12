@@ -2,6 +2,12 @@ import type { WindField } from "@/services/wind/types";
 import type { IMapAdapter } from "@/adapter/map/types";
 import { ParticleLayer } from "./ParticleLayer";
 import { HeatmapLayer } from "./HeatmapLayer";
+
+export interface WindUserOptions {
+    speedMultiplier?: number
+    particleCount?: number
+    fadeOpacity?: number
+}
 export class WindLayerOrchestrator {
     private mapadapter: IMapAdapter
     private windField: WindField
@@ -35,6 +41,10 @@ export class WindLayerOrchestrator {
         // store那里根据视口传入level，这里把level私有化，再传给各个图层
         // 图层内部进行判断，改变线宽与移动速度
         this.particleLayer?.updateWindField(windField)
+    }
+
+    setUserOptions(opts: WindUserOptions) {
+        this.particleLayer?.setUserOptions(opts)
     }
 
     destroy() {
