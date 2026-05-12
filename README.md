@@ -9,7 +9,7 @@
 ## 效果预览
 
 <!-- 建议放一张 GIF 或截图 -->
-![alt text](public/demo.pngdemo.png)
+![alt text](public/demo.png)
 ---
 
 ## 快速开始
