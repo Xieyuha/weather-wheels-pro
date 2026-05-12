@@ -4,7 +4,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import { ImageTile } from "ol/source";
-import { fromLonLat, transformExtent } from "ol/proj";
+import { fromLonLat, transformExtent, toLonLat } from "ol/proj";
 class OlAdapter implements IMapAdapter {
     private map: Map | null = null;
     private container: string;
@@ -101,6 +101,14 @@ class OlAdapter implements IMapAdapter {
         // OL 用 moveend 事件
         map.on('moveend', handler);
         return () => map.un('moveend', handler);
+    }
+
+    getCoordinateAtPixel(x: number, y: number): { lon: number; lat: number } | null {
+        const map = this.getMapInstance()
+        const coord = map.getCoordinateFromPixel([x, y])
+        if (!coord) return null
+        const [lon, lat] = toLonLat(coord) as [number, number]
+        return { lon, lat }
     }
 
     onLodChange(callback: (level: 0 | 1 | 2) => void): () => void {

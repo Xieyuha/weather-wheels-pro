@@ -108,11 +108,21 @@ class CesiumAdapter implements IMapAdapter {
         const handler = () => {
             const height = this.map!.camera.positionCartographic.height
             const level = height > 3_000_000 ? 0 : height > 500_000 ? 1 : 2
-            console.log('Camera height:', height, '=> LOD level:', level)
             callback(level)
         }
         this.map!.camera.changed.addEventListener(handler)
         return () => this.map!.camera.changed.removeEventListener(handler)
+    }
+
+    getCoordinateAtPixel(x: number, y: number): { lon: number; lat: number } | null {
+        if (!this.map) return null
+        const cartesian = this.map.camera.pickEllipsoid(new Cesium.Cartesian2(x, y))
+        if (!cartesian) return null
+        const carto = Cesium.Cartographic.fromCartesian(cartesian)
+        return {
+            lon: Cesium.Math.toDegrees(carto.longitude),
+            lat: Cesium.Math.toDegrees(carto.latitude),
+        }
     }
 
     destroy(): void {

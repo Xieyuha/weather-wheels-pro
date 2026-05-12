@@ -38,6 +38,7 @@ export interface IMapAdapter {
     getViewHeight(): number;  // 返回"等效高度"，单位米
     onViewChange(callback: (bounds: Bounds | undefined) => void): () => void;
     onLodChange?(callback: (level: 0 | 1 | 2) => void): () => void
+    getCoordinateAtPixel?(x: number, y: number): { lon: number; lat: number } | null
 }
 
 export type Bounds = { lo1: number; la1: number; lo2: number; la2: number }
