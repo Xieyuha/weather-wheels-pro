@@ -2,14 +2,14 @@
 
 基于 Vue 3 + TypeScript 的风场粒子可视化平台，支持 Cesium 三维地球与 OpenLayers 二维地图切换，实现 Windy 风格的粒子流动动画。
 
-> **配套工具**：[grib2mcp](https://github.com/Xieyuha/grib2mcp) — 将 NOAA GFS GRIB2 文件转换为本项目所需的 JSON 风场格式。
+> **配套工具**：[grib2-mcp](https://github.com/Xieyuha/grib2-mcp) — 将 NOAA GFS GRIB2 文件转换为本项目所需的 JSON 风场格式。
 
 ---
 
 ## 效果预览
 
 <!-- 建议放一张 GIF 或截图 -->
-![alt text](demo.png)
+![alt text](public/demo.pngdemo.png)
 ---
 
 ## 快速开始
