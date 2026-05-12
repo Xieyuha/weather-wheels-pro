@@ -7,19 +7,29 @@ export class WindParticleSystem {
 
     constructor(
         private windField: WindField,
-        private count: number,
+        count: number,
         private scale: number,
         private maxAlpha: number,
         private spawnBounds: WindBounds = windField.meta.bounds,
     ) {
-        this.particles = Array.from({ length: this.count },
-            () => createParticle(this.spawnBounds)
-        );
+        this.particles = Array.from({ length: count }, () => createParticle(this.spawnBounds));
     }
 
     updateSpawnBounds(bounds: WindBounds | undefined) {
         if (bounds) this.spawnBounds = bounds
-        console.log('Updated spawn bounds:', this.spawnBounds);
+    }
+
+    setScale(scale: number) {
+        this.scale = scale
+    }
+
+    setCount(n: number) {
+        if (n > this.particles.length) {
+            const add = Array.from({ length: n - this.particles.length }, () => createParticle(this.spawnBounds))
+            this.particles.push(...add)
+        } else {
+            this.particles.length = n
+        }
     }
 
     // 步进所有粒子，输出要画什么，但不管怎么画
