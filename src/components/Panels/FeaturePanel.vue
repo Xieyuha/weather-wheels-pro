@@ -6,15 +6,80 @@
                 <span class="brand-tag">PRO</span>
             </div>
             <div class="content">
-                <div class="card">
-                    <div class="card-glow"></div>
+
+                <!-- LOD 状态指示器 -->
+                <div class="section">
+                    <div class="section-row">
+                        <span class="section-title">数据分辨率</span>
+                        <span class="lod-badge" :style="{ color: lodColor }">{{ lodLabel }}</span>
+                    </div>
+                    <div class="section-desc">LOD 级别 {{ mapStore.zoomLevel + 1 }} / 3，缩放时自动切换</div>
                 </div>
+
+                <div class="divider" />
+
+                <!-- 粒子参数 -->
+                <div class="section">
+                    <div class="section-title">粒子参数</div>
+
+                    <div class="param-row">
+                        <span class="param-label">速度倍率</span>
+                        <span class="param-val">× {{ windStore.speedMultiplier.toFixed(1) }}</span>
+                    </div>
+                    <el-slider
+                        :model-value="windStore.speedMultiplier"
+                        :min="0.2" :max="3.0" :step="0.1"
+                        :show-tooltip="false"
+                        @input="onSpeedInput"
+                    />
+
+                    <div class="param-row">
+                        <span class="param-label">粒子数量</span>
+                        <span class="param-val">{{ windStore.particleCount.toLocaleString() }}</span>
+                    </div>
+                    <el-slider
+                        :model-value="windStore.particleCount"
+                        :min="200" :max="10000" :step="200"
+                        :show-tooltip="false"
+                        @change="onCountChange"
+                    />
+
+                    <div class="param-row">
+                        <span class="param-label">尾迹长度</span>
+                        <span class="param-val">{{ Math.round((windStore.fadeOpacity - 0.80) / (0.97 - 0.80) * 100) }}%</span>
+                    </div>
+                    <el-slider
+                        :model-value="windStore.fadeOpacity"
+                        :min="0.80" :max="0.97" :step="0.01"
+                        :show-tooltip="false"
+                        @input="onFadeInput"
+                    />
+                </div>
+
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useMapStore } from '@/stores/useMapStore'
+import { useWindStore } from '@/stores/useWindStore'
+
+const mapStore = useMapStore()
+const windStore = useWindStore()
+
+const LOD_LABELS = ['1.0°', '0.5°', '0.25°']
+const LOD_COLORS = ['var(--text-secondary)', 'var(--color-warning)', 'var(--color-success)']
+
+const lodLabel = computed(() => LOD_LABELS[mapStore.zoomLevel] ?? '1.0°')
+const lodColor = computed(() => LOD_COLORS[mapStore.zoomLevel] ?? 'var(--text-secondary)')
+
+function unwrap(v: number | number[]): number { return Array.isArray(v) ? v[0]! : v }
+
+function onSpeedInput(v: number | number[]) { windStore.applySpeedMultiplier(unwrap(v)) }
+function onCountChange(v: number | number[]) { windStore.applyParticleCount(unwrap(v)) }
+function onFadeInput(v: number | number[]) { windStore.applyFadeOpacity(unwrap(v)) }
 </script>
 
 <style scoped>
@@ -42,6 +107,7 @@
         gap: 8px;
         border-bottom: 1px solid var(--border-subtle);
         background: linear-gradient(180deg, rgba(236, 106, 61, 0.04), transparent);
+        flex-shrink: 0;
     }
 
     .brand {
@@ -69,46 +135,74 @@
 
     .content {
         flex: 1;
-        padding: 20px;
-        overflow: auto;
+        padding: 16px 20px;
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 0;
     }
 
-    .card {
-        position: relative;
-        height: 220px;
-        background: var(--gradient-card);
-        border: 1px solid var(--border-subtle);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-sm), var(--shadow-inset-top);
-        overflow: hidden;
-        cursor: pointer;
-        transition: var(--transition-base);
+    .section {
+        padding: 14px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .card:hover {
-        transform: translateY(-2px);
-        border-color: var(--border-default);
-        box-shadow: var(--shadow-md), var(--shadow-inset-top);
+    .section-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    /* 顶部柔光：模拟主色微微泛起的光感 */
-    .card-glow {
-        position: absolute;
-        top: -40%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 70%;
-        height: 80%;
-        background: radial-gradient(ellipse at center, var(--color-primary-glow) 0%, transparent 70%);
-        opacity: 0.5;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
+    .section-title {
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
     }
 
-    .card:hover .card-glow {
-        opacity: 0.85;
+    .lod-badge {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.02em;
+        transition: color 0.3s ease;
+    }
+
+    .section-desc {
+        font-size: var(--font-size-xs);
+        color: var(--text-tertiary);
+        line-height: 1.5;
+    }
+
+    .divider {
+        height: 1px;
+        background: var(--border-subtle);
+    }
+
+    .param-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: -4px;
+    }
+
+    .param-label {
+        font-size: var(--font-size-sm);
+        color: var(--text-secondary);
+    }
+
+    .param-val {
+        font-size: var(--font-size-sm);
+        color: var(--text-primary);
+        font-variant-numeric: tabular-nums;
+        font-weight: var(--font-weight-medium);
+    }
+
+    /* el-slider 间距收紧 */
+    :deep(.el-slider) {
+        margin-bottom: 6px;
     }
 </style>
