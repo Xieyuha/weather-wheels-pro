@@ -18,6 +18,10 @@ export interface IProjector {
 // 地图适配器接口
 export interface IMapAdapter {
     init(): Promise<void>;
+    // 添加各种方法的组装与暴露，manage管理子文件夹
+    // 要素、图层、
+    // 事件总线：缩放->请求(优化)
+    // 视角
     destroy(): void;
     getMap(): unknown;
 
@@ -31,8 +35,10 @@ export interface IMapAdapter {
     // 当前相机可见范围（经纬度，-180~180 系统），用于约束粒子撒点区域
     // 可选：不实现时粒子回退到风场全局 bounds
     getViewBounds?(): { lo1: number; la1: number; lo2: number; la2: number } | undefined;
-
+    getViewHeight(): number;  // 返回"等效高度"，单位米
     onViewChange(callback: (bounds: Bounds | undefined) => void): () => void;
+    onLodChange?(callback: (level: 0 | 1 | 2) => void): () => void
+    getCoordinateAtPixel?(x: number, y: number): { lon: number; lat: number } | null
 }
 
 export type Bounds = { lo1: number; la1: number; lo2: number; la2: number }

@@ -1,5 +1,4 @@
-import gfsJson from '@/mocks/wind.json';
-import type { WindField } from './types';
+import type { WindField, Resolution } from './types';
 
 interface GfsRecord {
     header: {
@@ -13,8 +12,17 @@ interface GfsRecord {
 }
 
 class WindService {
-    async getWindData(): Promise<WindField> {
-        const records = gfsJson as unknown as GfsRecord[];
+    constructor() {
+    }
+    async getWindData(resolution: Resolution): Promise<WindField> {
+        const fileMap: Record<number, () => Promise<{ default: unknown }>> = {
+            1.0: () => import('@/mocks/wind_1deg.json'),
+            0.5: () => import('@/mocks/wind_0.5deg.json'),
+            0.25: () => import('@/mocks/wind_0.25deg.json'),
+        }
+        const { default: gfsJson } = await fileMap[resolution]!()
+
+        const records = gfsJson as unknown as GfsRecord[]
         const u = records.find(r => r.header.parameterNumber === 2)!;
         const v = records.find(r => r.header.parameterNumber === 3)!;
         const h = u.header;

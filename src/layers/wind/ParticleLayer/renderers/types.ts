@@ -8,5 +8,6 @@ export interface IWindRenderer {
         r: number, g: number, b: number, a: number,
     ): void;
     endFrame(): void,
+    updateOptions(options: { fadeOpacity: number; lineWidth: number }): void,
     destroy(): void
 }

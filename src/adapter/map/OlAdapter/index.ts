@@ -4,8 +4,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import { ImageTile } from "ol/source";
-import OSM from 'ol/source/OSM';
-import { fromLonLat, transformExtent } from "ol/proj";
+import { fromLonLat, transformExtent, toLonLat } from "ol/proj";
 class OlAdapter implements IMapAdapter {
     private map: Map | null = null;
     private container: string;
@@ -14,6 +13,12 @@ class OlAdapter implements IMapAdapter {
         this.container = config.container;
     }
 
+    private getMapInstance(): Map {
+        if (!this.map) {
+            throw new Error('Map not initialized. Call init() first.');
+        }
+        return this.map;
+    }
     async init(): Promise<void> {
         try {
             const map = new Map({
@@ -39,21 +44,32 @@ class OlAdapter implements IMapAdapter {
         }
     }
 
-    // TODO: 提取 MVP 矩阵，构造快速投影器
-    // 每帧调一次（取矩阵），project() 每粒子调一次（纯数学）
     getProjector(): IProjector {
+        const R = 6378137;  // 地球半径 WGS84
+        const deg2rad = Math.PI / 180;
+
+        const map = this.getMapInstance();
+        const view = map.getView();
+        const res = view.getResolution()!;
+        const size = map.getSize() as [number, number];
+
+        const invRes = 1 / res;
+        const halfW = size[0] / 2;
+        const halfH = size[1] / 2;
+        const [centerX, centerY] = view.getCenter() as [number, number];
         return {
             project: (lon: number, lat: number) => {
-                if (!this.map) return null;
-                // const view = this.map.getView();
-                const screen = this.map.getPixelFromCoordinate(fromLonLat([lon, lat])) as [number, number] | undefined;
-                if (!screen) return null;
-                return { x: screen[0], y: screen[1] };
+                // 将经纬度转换为 Web Mercator 坐标
+                const mx = R * lon * deg2rad;
+                const my = R * Math.log(Math.tan(Math.PI / 4 + lat * deg2rad / 2));
+                const screenX = (mx - centerX) * invRes + halfW;
+                const screenY = (centerY - my) * invRes + halfH;
+                return { x: screenX, y: screenY };
             }
         };
     }
 
-    getViewBounds() {
+    getViewBounds(): Bounds | undefined {
         if (!this.map) return undefined;
         const size = this.map.getSize();
         if (!size) return undefined;
@@ -64,28 +80,52 @@ class OlAdapter implements IMapAdapter {
     }
 
     getOverlayContainer(): HTMLElement {
-        return this.map!.getTargetElement() as HTMLElement;
+        return this.getMapInstance().getTargetElement() as HTMLElement;
     }
 
     getViewportSize(): { w: number; h: number } {
-        return {
-            w: this.map!.getTargetElement().clientWidth,
-            h: this.map!.getTargetElement().clientHeight,
-        };
+        const size = this.getMapInstance().getSize() ?? [0, 0];
+        return { w: size[0]!, h: size[1]! };
     }
 
-    onViewChange(callback): () => void {
+    getViewHeight(): number {
+        const map = this.getMapInstance();
+        const zoom = map.getView().getZoom() ?? 0;
+        // zoom 0~18 映射到高度
+        return 15_000_000 / Math.pow(2, zoom);  // 粗略公式够用
+    }
+
+    onViewChange(callback: (bounds: Bounds | undefined) => void): () => void {
+        const map = this.getMapInstance();
         const handler = () => callback(this.getViewBounds());
         // OL 用 moveend 事件
-        this.map.on('moveend', handler);
-        return () => this.map.un('moveend', handler);
+        map.on('moveend', handler);
+        return () => map.un('moveend', handler);
+    }
+
+    getCoordinateAtPixel(x: number, y: number): { lon: number; lat: number } | null {
+        const map = this.getMapInstance()
+        const coord = map.getCoordinateFromPixel([x, y])
+        if (!coord) return null
+        const [lon, lat] = toLonLat(coord) as [number, number]
+        return { lon, lat }
+    }
+
+    onLodChange(callback: (level: 0 | 1 | 2) => void): () => void {
+        const map = this.getMapInstance();
+        const handler = () => {
+            const zoom = map.getView().getZoom() ?? 0
+            const level = zoom < 5 ? 0 : zoom < 9 ? 1 : 2
+            callback(level)
+        }
+        map.on('moveend', handler)
+        return () => map.un('moveend', handler)
     }
 
     destroy(): void {
-        if (this.map) {
-            this.map.dispose();
-            this.map = null;
-        }
+        if (!this.map) return;
+        this.map.dispose();
+        this.map = null;
     }
 
     getMap(): Map | null {
