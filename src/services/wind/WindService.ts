@@ -26,7 +26,6 @@ class WindService {
         const u = records.find(r => r.header.parameterNumber === 2)!;
         const v = records.find(r => r.header.parameterNumber === 3)!;
         const h = u.header;
-        console.log(`Loaded wind data with resolution ${resolution}°, grid size ${h.nx}x${h.ny}, bounds [${h.lo1},${h.la1}] to [${h.lo2},${h.la2}]`)
         return {
             meta: {
                 bounds: { lo1: h.lo1, la1: h.la1, lo2: h.lo2, la2: h.la2 },

@@ -1,42 +1,72 @@
-# weather-wheels-pro
+# WeatherWheels Pro
 
-This template should help get you started developing with Vue 3 in Vite.
+基于 Vue 3 + TypeScript 的风场粒子可视化平台，支持 Cesium 三维地球与 OpenLayers 二维地图切换，实现 Windy 风格的粒子流动动画。
 
-## Recommended IDE Setup
+> **配套工具**：[grib2mcp](https://github.com/Xieyuha/grib2mcp) — 将 NOAA GFS GRIB2 文件转换为本项目所需的 JSON 风场格式。
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Recommended Browser Setup
+## 效果预览
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+<!-- 建议放一张 GIF 或截图 -->
+![alt text](demo.png)
+---
 
-## Type Support for `.vue` Imports in TS
+## 快速开始
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+**前置条件**：Node.js ≥ 20.19、pnpm、[Cesium Ion Token](https://cesium.com/ion/)（免费注册，当前该项目版本对token非强制）
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
+```bash
+git clone https://github.com/Xieyuha/weather-wheels-pro.git
+cd weather-wheels-pro
 pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+cp .env.development .env.development.local
+# 编辑 .env.development.local，填入 VITE_CESIUM_TOKEN
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+---
 
-```sh
-pnpm build
+ 
+## 风场数据
+ 
+项目不内置数据文件，需自行从 NOAA GFS 下载并转换。
+ 
+**1. 下载 GRIB2 数据**
+ 
+前往 [NOAA GFS 数据集](https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs) 下载所需时次的 GRIB2 文件（1.0° / 0.5° / 0.25° 三档分辨率分别对应 LOD 三个层级）。
+ 
+也可以配合 [grib2mcp](https://github.com/your-repo/grib2mcp) 自动拉取指定时次的数据。
+ 
+**2. 转换为 JSON**
+[(https://github.com/danwild/wind-js-server)](https://github.com/danwild/wind-js-server) 是一个 Node.js 工具，可以将 GRIB2 转换为前端 `WindField` 格式的 JSON 文件。安装后运行：
+ 
+
+**3. 转换为 本项目所需特定JSON**
+ 
+```bash
+pnpm run convert -- --input ./data/gfs.grib2 --output ./public/data/
 ```
+ 
+**4. 启动**
+ 
+数据就位后正常 `pnpm dev` 即可。
+ 
+---
+
+## 技术栈
+
+|          |                                      |
+| -------- | ------------------------------------ |
+| 前端框架 | Vue 3 (Composition API) + TypeScript |
+| 构建工具 | Vite 7                               |
+| 三维地图 | CesiumJS 1.138                       |
+| 二维地图 | OpenLayers 10                        |
+| 状态管理 | Pinia                                |
+| 包管理   | pnpm                                 |
+
+---
+
+## License
+
+MIT
